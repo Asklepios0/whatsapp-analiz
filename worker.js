@@ -4,21 +4,22 @@ onmessage = function(e) {
     const totalLines = lines.length;
 
     let results = {
-        totalMessages: 0, senders: {}, startDate: "",
+        totalMessages: 0, senders: {}, media: {}, startDate: "",
         dateCounts: {}, peakDate: { date: "", count: 0 },
         initiators: {}, responseTimes: {}, avgResponse: {},
-        emojis: {}, words: {}, sampleChat: [], activeDates: new Set()
+        emojis: {}, words: {}, vibe: { pos: 0, neg: 0, toxic: 0, laugh: 0 },
+        activeDates: new Set()
     };
 
     const regex = /\[?(\d{1,2}[\.\-\/]\d{1,2}[\.\-\/]\d{2,4})[ ,]+(\d{1,2}:\d{2}).*?\]?[\s\-]+([^:]+):\s+(.*)/;
     const emojiRegex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g;
-    const stopWords = ["ve", "bir", "bu", "da", "de", "için", "çok", "ne", "var", "gibi", "mi", "ama", "tamam", "evet", "hayır", "ben", "sen", "o", "bana", "sana", "bende", "sende", "olan", "öyle", "sonra", "diye", "yani", "yok", "yaa", "daha", "kadar", "bişey"];
+    const stopWords = ["ve", "bir", "bu", "da", "de", "için", "çok", "ne", "var", "gibi", "mi", "ama", "tamam", "evet", "hayır", "ben", "sen", "o", "bana", "sana", "bende", "sende", "olan", "öyle", "sonra", "diye", "yani", "yok", "yaa", "daha", "kadar", "bişey", "iyi", "nasılsın"];
 
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const phoneRegex = /(\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9})/g;
+    const toxicWords = ["amk", "aq", "salak", "aptal", "gerizekalı", "siktir", "sg", "sus", "lan", "bela", "nefret", "ayrıl"];
+    const laughWords = ["hahaha", "haha", "jsjsjs", "xdd", "lol", "koptum"];
+    const posWords = ["aşk", "canım", "harika", "süper", "teşekkür", "kalp", "sevgilim", "özledim", "tatlı", "güzel"];
 
-    let senderMap = {}, senderCounter = 1, lastTime = null, lastSender = null;
-    const startIndex = Math.max(0, totalLines - 500);
+    let lastTime = null, lastSender = null;
 
     lines.forEach((line, index) => {
         const match = line.match(regex);
@@ -26,14 +27,16 @@ onmessage = function(e) {
             const dateStr = match[1], timeStr = match[2], sender = match[3].trim();
             let content = match[4].toLowerCase();
 
-            if (content.includes("medya dahil edilmedi") || content.includes("şifrelenmiş")) return;
+            // Medya Kullanımını Say (Karar motoru için önemli)
+            if (content.includes("medya dahil edilmedi") || content.includes("şifrelenmiş") || content.includes("ses kaydı")) {
+                results.media[sender] = (results.media[sender] || 0) + 1;
+                return;
+            }
 
             if (!results.startDate) results.startDate = dateStr;
             results.totalMessages++;
             results.senders[sender] = (results.senders[sender] || 0) + 1;
             results.dateCounts[dateStr] = (results.dateCounts[dateStr] || 0) + 1;
-
-            if (!senderMap[sender]) { senderMap[sender] = `[KİŞİ_${senderCounter}]`; senderCounter++; }
 
             const dParts = dateStr.split(/[\.\-\/]/);
             const validDate = `${dParts[1]}/${dParts[0]}/${dParts[2].length === 2 ? '20'+dParts[2] : dParts[2]}`;
@@ -52,17 +55,21 @@ onmessage = function(e) {
             lastTime = currentTime || lastTime; lastSender = sender;
 
             const ems = content.match(emojiRegex);
-            if (ems) ems.forEach(em => results.emojis[em] = (results.emojis[em] || 0) + 1);
+            if (ems) ems.forEach(em => {
+                results.emojis[em] = (results.emojis[em] || 0) + 1;
+                if(em === "😂" || em === "🤣") results.vibe.laugh++;
+                if(em === "❤️" || em === "🥰") results.vibe.pos++;
+            });
+
             content.split(/[\s\.\,\?\!]+/).forEach(w => {
+                if (toxicWords.includes(w)) results.vibe.toxic++;
+                if (laughWords.includes(w)) results.vibe.laugh++;
+                if (posWords.includes(w)) results.vibe.pos++;
+
                 if (w.length > 2 && !stopWords.includes(w) && !emojiRegex.test(w)) {
                     results.words[w] = (results.words[w] || 0) + 1;
                 }
             });
-
-            if (index >= startIndex) {
-                let cleanContent = match[4].replace(urlRegex, '[LİNK]').replace(phoneRegex, '[NUMARA]');
-                results.sampleChat.push(`${senderMap[sender]}: ${cleanContent}`);
-            }
         }
         if (index % 1000 === 0) postMessage({ type: 'PROGRESS', progress: Math.round((index / totalLines) * 100) });
     });
@@ -85,11 +92,6 @@ onmessage = function(e) {
     results.topEmojis = Object.entries(results.emojis).sort((a,b) => b[1]-a[1]).slice(0, 10).map(x => x[0]);
     results.topWords = Object.entries(results.words).sort((a,b) => b[1]-a[1]).slice(0, 10).map(x => x[0]);
 
-    results.aiPayload = {
-        relationType: relation,
-        stats: { total: results.totalMessages },
-        chatSample: results.sampleChat.slice(-100)
-    };
-
+    results.relationType = relation;
     postMessage({ type: 'RESULT', payload: results });
 };
