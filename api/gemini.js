@@ -1,13 +1,12 @@
 export default async function handler(req, res) {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Sadece POST desteklenir' });
-    }
+    if (req.method !== 'POST') return res.status(405).json({ error: 'Sadece POST desteklenir' });
 
     const { prompt } = req.body;
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY; 
 
+    // KRİTİK KONTROL 1: API Key sunucuda var mı?
     if (!GEMINI_API_KEY) {
-        return res.status(500).json({ error: 'API Key Vercel ortamına eklenmemiş.' });
+        return res.status(500).json({ error: 'API_KEY_YOK: Vercel paneline keyi eklememişsin.' });
     }
 
     try {
@@ -19,14 +18,14 @@ export default async function handler(req, res) {
         
         const data = await response.json();
         
-        // Hata ayıklama
+        // KRİTİK KONTROL 2: Google'dan hata mı geldi?
         if (data.error) {
-            return res.status(500).json({ error: data.error.message });
+            return res.status(500).json({ error: `GOOGLE_HATASI: ${data.error.message}` });
         }
         
         const aiText = data.candidates[0].content.parts[0].text;
         res.status(200).json({ text: aiText });
     } catch (error) {
-        res.status(500).json({ error: 'Google sunucularına bağlanılamadı.' });
+        res.status(500).json({ error: 'SUNUCU_BAGLANTI_HATASI: Google'a ulaşılamadı.' });
     }
 }
