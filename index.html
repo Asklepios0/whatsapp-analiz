@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sohbet İstihbaratı | AI Powered</title>
+    <title>Sohbet İstihbaratı | %100 Lokal AI</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
@@ -12,7 +12,7 @@
         .container { max-width: 450px; margin: auto; } 
         
         .header-card { background: var(--card-bg); padding: 20px; border-radius: 15px; text-align: center; border-bottom: 3px solid var(--whatsapp-green); margin-bottom: 15px; }
-        select, .custom-file-upload { background: #202c33; color: white; border: 1px solid var(--whatsapp-green); padding: 10px; border-radius: 8px; width: 100%; margin-bottom: 10px; font-weight: bold; box-sizing: border-box; display: block; text-align: center; }
+        select, .custom-file-upload { background: #202c33; color: white; border: 1px solid var(--whatsapp-green); padding: 10px; border-radius: 8px; width: 100%; margin-bottom: 10px; font-weight: bold; box-sizing: border-box; display: block; text-align: center; outline: none; }
         input[type="file"] { display: none; }
         
         .progress-bar { width: 100%; height: 4px; background: #2a3942; border-radius: 5px; margin: 10px 0; display: none; overflow: hidden; }
@@ -22,25 +22,26 @@
         .dashboard { display: none; flex-direction: column; gap: 10px; }
         
         .card { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid #202c33; }
-        .card h3 { margin: 0 0 10px 0; font-size: 1em; color: var(--whatsapp-green); }
+        .card h3 { margin: 0 0 10px 0; font-size: 1em; color: var(--whatsapp-green); display: flex; justify-content: space-between; }
         
-        .ai-summary { background: #1a252b; padding: 12px; border-radius: 8px; font-style: italic; line-height: 1.4; border-left: 3px solid var(--whatsapp-green); }
+        .ai-summary { background: #1a252b; padding: 15px; border-radius: 8px; font-style: italic; line-height: 1.5; border-left: 4px solid var(--whatsapp-green); }
+        .scenario-badge { font-size: 0.75em; background: var(--whatsapp-green); color: #000; padding: 2px 8px; border-radius: 10px; font-weight: bold; font-style: normal; margin-bottom: 5px; display: inline-block; }
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
         .stat-box { background: #1a252b; padding: 8px; border-radius: 8px; text-align: center; }
         .stat-box span { display: block; font-size: 0.8em; color: #8696a0; }
         .stat-box b { font-size: 1.1em; color: #fff; }
 
-        .person-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2a3942; }
+        .person-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #2a3942; }
         .person-row:last-child { border-bottom: none; }
-        .person-info { display: flex; flex-direction: column; width: 40%; }
+        .person-info { display: flex; flex-direction: column; width: 45%; }
         .person-metrics { display: flex; flex-direction: column; text-align: right; font-size: 0.85em; color: #8696a0; }
         
-        .percent-bar { width: 100%; height: 6px; background: #2a3942; border-radius: 3px; margin-top: 4px; }
+        .percent-bar { width: 100%; height: 6px; background: #2a3942; border-radius: 3px; margin-top: 5px; }
         .percent-fill { height: 100%; border-radius: 3px; }
 
         .pill-container { display: flex; flex-wrap: wrap; gap: 5px; }
-        .pill { background: #1a252b; padding: 3px 8px; border-radius: 12px; font-size: 0.85em; }
+        .pill { background: #1a252b; padding: 4px 10px; border-radius: 12px; font-size: 0.85em; }
 
         #exportBtn { display: none; background: #FF0050; color: white; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
         .watermark { display: none; text-align: center; color: #8696a0; font-size: 0.75em; margin-top: 10px; opacity: 0.7; }
@@ -49,14 +50,16 @@
 <body>
     <div class="container">
         <div class="header-card">
-            <h1 style="margin: 0 0 5px 0;">Sohbet Analizi <small style="font-size: 0.5em;">AI</small></h1>
-            <p style="font-size: 0.8em; color: #8696a0; margin: 0 0 15px 0;">Veriler cihazda işlenir ve AI için anonimleştirilir.</p>
+            <h1 style="margin: 0 0 5px 0;">Sohbet Analizi <small style="font-size: 0.5em; color: var(--whatsapp-green);">OFFLINE AI</small></h1>
+            <p style="font-size: 0.8em; color: #8696a0; margin: 0 0 15px 0;">Hiçbir veri internete gönderilmez. %100 Cihaz İçi.</p>
             
             <select id="relationType">
-                <option value="Flört/Sevgili">❤️ Flört / Sevgili Sohbeti</option>
-                <option value="Arkadaş/Kanka">🍻 Arkadaş / Kanka</option>
-                <option value="Aile">🏠 Aile Sohbeti</option>
-                <option value="İş/Diğer">💼 İş / Diğer</option>
+                <option value="Flört">❤️ Flört / Sevgili</option>
+                <option value="Arkadaş">🍻 Arkadaş / Kanka</option>
+                <option value="Aile">🏠 Aile</option>
+                <option value="Eski_Sevgili">💔 Eski Sevgili</option>
+                <option value="Is_Egitim">💼 İş / Eğitim</option>
+                <option value="Situationship">🌀 Situationship (Belirsiz)</option>
             </select>
 
             <label for="chatFile" class="custom-file-upload">Sohbeti Seç (.txt / .zip)</label>
@@ -70,8 +73,11 @@
         <div id="renderArea">
             <div class="dashboard" id="dashboard">
                 <div class="card">
-                    <h3>🤖 Yapay Zeka Teşhisi</h3>
-                    <div id="aiSummaryText" class="ai-summary">Analiz ediliyor...</div>
+                    <h3>🤖 Algoritmik Teşhis <span style="font-size:0.7em; color:#8696a0;">Lokal Karar Motoru</span></h3>
+                    <div class="ai-summary">
+                        <div id="scenarioName" class="scenario-badge">Analiz Ediliyor</div>
+                        <div id="aiSummaryText">Dosya bekleniyor...</div>
+                    </div>
                 </div>
 
                 <div class="grid-2">
@@ -97,7 +103,7 @@
                     </div>
                 </div>
             </div>
-            <div class="watermark" id="watermark">Analizini yap: sohbetanalizi.vercel.app</div>
+            <div class="watermark" id="watermark">Kendi sohbetini güvenle analiz et.</div>
         </div>
     </div>
     <script src="app.js"></script>
