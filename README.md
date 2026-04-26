@@ -56,15 +56,5 @@ Bu uygulama, **Gizlilik Odaklı Tasarım (Privacy by Design)** ilkesine dayanır
 
 ## 🤝 Katkıda Bulunma
 
-Geliştirme önerileriniz veya hata bildirimleriniz için lütfen bir **Issue** açın veya **Pull Request** gönderin. Karar motoru için yeni senaryo önerilerine her zaman açığız!
+Geliştirme önerileriniz veya hata bildirimleriniz için lütfen bir **Issue** açın veya **Pull Request** gönderin. Karar motoru için yeni senaryo önerilerine her zaman açığız.
 
----
-
-## 👤 Geliştirici
-
-**Bedirhan Bıyıkcı** *Gazetecilik Öğrencisi & AI Entegrasyon Meraklısı* [GitHub](https://github.com/bedirhanbiyikci) | [LinkedIn](https://linkedin.com/in/bedirhanbiyikci)
-
----
-
-### 📝 Lisans
-Bu proje **MIT Lisansı** altında lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına göz atabilirsiniz.
