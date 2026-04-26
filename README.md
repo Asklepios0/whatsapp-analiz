@@ -40,7 +40,7 @@ Bu proje, herhangi bir backend veya API bağımlılığı olmaksızın modern we
 
 Proje statik dosyalardan oluştuğu için herhangi bir sunucu kurulumu gerektirmez.
 
-1. Bu depoyu klonlayın: `git clone https://github.com/kullaniciadi/sohbet-istihbarati.git`
+1. Bu depoyu klonlayın: `git clone https://github.com/Asklepios0/whatsapp-analiz.git`
 2. `index.html` dosyasını tarayıcınızda açın.
 3. (Opsiyonel) Ücretsiz hosting için **GitHub Pages** veya **Vercel** üzerinden tek tıkla yayına alabilirsiniz.
 
