@@ -3,55 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sohbet İstihbaratı | %100 Lokal AI</title>
+    <title>Sohbet İstihbaratı | Wrapped Edition</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
-        :root { --whatsapp-green: #25D366; --dark-bg: #0b141a; --card-bg: #111b21; --text: #e9edef; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; background: var(--dark-bg); color: var(--text); margin: 0; padding: 10px; font-size: 14px; }
-        .container { max-width: 450px; margin: auto; } 
+        :root {
+            --bg-dark: #0a0a0f;
+            --card-bg: rgba(25, 25, 35, 0.85);
+            --text-main: #ffffff;
+            --text-muted: #a0a0b5;
+            --primary-grad: linear-gradient(135deg, #FF0050, #7000FF);
+            --secondary-grad: linear-gradient(135deg, #00F2FE, #4FACFE);
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 15px; font-size: 14px; background-image: radial-gradient(circle at top right, rgba(112, 0, 255, 0.15), transparent 40%), radial-gradient(circle at bottom left, rgba(255, 0, 80, 0.15), transparent 40%); min-height: 100vh; }
+        .container { max-width: 450px; margin: auto; }
         
-        .header-card { background: var(--card-bg); padding: 20px; border-radius: 15px; text-align: center; border-bottom: 3px solid var(--whatsapp-green); margin-bottom: 15px; }
-        select, .custom-file-upload { background: #202c33; color: white; border: 1px solid var(--whatsapp-green); padding: 10px; border-radius: 8px; width: 100%; margin-bottom: 10px; font-weight: bold; box-sizing: border-box; display: block; text-align: center; outline: none; }
+        .header-card { background: var(--primary-grad); padding: 30px 20px; border-radius: 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(255, 0, 80, 0.3); color: white; border: 1px solid rgba(255,255,255,0.2); }
+        .header-card h1 { margin: 0 0 5px 0; font-size: 2.2em; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; }
+        .header-card p { margin: 0 0 20px 0; font-size: 0.85em; opacity: 0.9; font-weight: 500; letter-spacing: 0.5px; }
+        
+        select, .custom-file-upload { background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 12px; border-radius: 12px; width: 100%; margin-bottom: 12px; font-weight: bold; box-sizing: border-box; display: block; text-align: center; outline: none; font-size: 1em; cursor: pointer; backdrop-filter: blur(5px); }
+        select option { background: var(--bg-dark); color: white; }
         input[type="file"] { display: none; }
         
-        .progress-bar { width: 100%; height: 4px; background: #2a3942; border-radius: 5px; margin: 10px 0; display: none; overflow: hidden; }
-        .progress-inner { height: 100%; background: var(--whatsapp-green); width: 0%; transition: 0.3s; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin: 15px 0; display: none; overflow: hidden; }
+        .progress-inner { height: 100%; background: var(--secondary-grad); width: 0%; transition: 0.3s; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 242, 254, 0.5); }
 
-        #renderArea { background: var(--dark-bg); padding: 5px; }
-        .dashboard { display: none; flex-direction: column; gap: 10px; }
+        #renderArea { background: var(--bg-dark); padding: 10px; border-radius: 24px; position: relative; }
+        .dashboard { display: none; flex-direction: column; gap: 15px; }
         
-        .card { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid #202c33; }
-        .card h3 { margin: 0 0 10px 0; font-size: 1em; color: var(--whatsapp-green); display: flex; justify-content: space-between; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+        .card h3 { margin: 0 0 15px 0; font-size: 1.1em; color: #fff; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         
-        .ai-summary { background: #1a252b; padding: 15px; border-radius: 8px; font-style: italic; line-height: 1.5; border-left: 4px solid var(--whatsapp-green); }
-        .scenario-badge { font-size: 0.75em; background: var(--whatsapp-green); color: #000; padding: 2px 8px; border-radius: 10px; font-weight: bold; font-style: normal; margin-bottom: 5px; display: inline-block; }
+        .ai-summary { background: rgba(255,0,80,0.1); padding: 18px; border-radius: 12px; font-style: italic; line-height: 1.6; border-left: 4px solid #FF0050; margin-top: 5px; }
+        .scenario-badge { font-size: 0.85em; background: var(--primary-grad); color: #fff; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-style: normal; margin-bottom: 10px; display: inline-block; box-shadow: 0 4px 10px rgba(255,0,80,0.3); text-transform: uppercase; letter-spacing: 0.5px; }
         
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .stat-box { background: #1a252b; padding: 8px; border-radius: 8px; text-align: center; }
-        .stat-box span { display: block; font-size: 0.8em; color: #8696a0; }
-        .stat-box b { font-size: 1.1em; color: #fff; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
+        .stat-box { background: rgba(255,255,255,0.03); padding: 15px 10px; border-radius: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .stat-box span { display: block; font-size: 0.75em; color: var(--text-muted); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 5px; }
+        .stat-box b { font-size: 1.3em; color: #fff; background: var(--secondary-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .person-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #2a3942; }
-        .person-row:last-child { border-bottom: none; }
-        .person-info { display: flex; flex-direction: column; width: 45%; }
-        .person-metrics { display: flex; flex-direction: column; text-align: right; font-size: 0.85em; color: #8696a0; }
+        .person-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .person-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .person-info { display: flex; flex-direction: column; width: 50%; }
+        .person-metrics { display: flex; flex-direction: column; text-align: right; font-size: 0.8em; color: var(--text-muted); }
+        .person-metrics b { color: #fff; }
         
-        .percent-bar { width: 100%; height: 6px; background: #2a3942; border-radius: 3px; margin-top: 5px; }
-        .percent-fill { height: 100%; border-radius: 3px; }
+        .percent-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-top: 6px; overflow: hidden; }
+        .percent-fill { height: 100%; border-radius: 4px; }
 
-        .pill-container { display: flex; flex-wrap: wrap; gap: 5px; }
-        .pill { background: #1a252b; padding: 4px 10px; border-radius: 12px; font-size: 0.85em; }
+        .pill-container { display: flex; flex-wrap: wrap; gap: 8px; }
+        .pill { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 20px; font-size: 0.9em; font-weight: 500; color: #fff; }
 
-        #exportBtn { display: none; background: #FF0050; color: white; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
-        .watermark { display: none; text-align: center; color: #8696a0; font-size: 0.75em; margin-top: 10px; opacity: 0.7; }
+        #exportBtn { display: none; background: var(--primary-grad); color: white; padding: 16px; border-radius: 14px; border: none; font-weight: 800; cursor: pointer; width: 100%; margin-top: 20px; font-size: 1.1em; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 25px rgba(255, 0, 80, 0.4); transition: transform 0.2s; }
+        #exportBtn:active { transform: scale(0.98); }
+        .watermark { display: none; text-align: center; color: var(--text-muted); font-size: 0.85em; margin-top: 20px; padding: 10px; border-top: 1px solid rgba(255,255,255,0.1); font-weight: bold; letter-spacing: 1px; }
+        .watermark span { background: var(--secondary-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header-card">
-            <h1 style="margin: 0 0 5px 0;">Sohbet Analizi <small style="font-size: 0.5em; color: var(--whatsapp-green);">OFFLINE AI</small></h1>
-            <p style="font-size: 0.8em; color: #8696a0; margin: 0 0 15px 0;">Hiçbir veri internete gönderilmez. %100 Cihaz İçi.</p>
+            <h1>Sohbet Özeti</h1>
+            <p>Verilerin Sadece Senin Cihazında İşlenir.</p>
             
             <select id="relationType">
                 <option value="Flört">❤️ Flört / Sevgili</option>
@@ -62,49 +76,49 @@
                 <option value="Situationship">🌀 Situationship (Belirsiz)</option>
             </select>
 
-            <label for="chatFile" class="custom-file-upload">Sohbeti Seç (.txt / .zip)</label>
+            <label for="chatFile" class="custom-file-upload">WhatsApp Dökümünü Yükle</label>
             <input type="file" id="chatFile" accept=".txt, .zip">
             
-            <div id="status" style="margin-top: 10px; font-size: 0.85em; color: #ffeb3b;"></div>
+            <div id="status" style="margin-top: 10px; font-size: 0.9em; font-weight: bold; color: #00F2FE;"></div>
             <div class="progress-bar" id="pBar"><div class="progress-inner" id="pInner"></div></div>
-            <button id="exportBtn">📸 Story Olarak Kaydet</button>
         </div>
 
         <div id="renderArea">
             <div class="dashboard" id="dashboard">
                 <div class="card">
-                    <h3>🤖 Algoritmik Teşhis <span style="font-size:0.7em; color:#8696a0;">Lokal Karar Motoru</span></h3>
+                    <h3>🤖 Yapay Zeka Teşhisi <span style="font-size:0.65em; color:var(--text-muted); font-weight:normal; letter-spacing: 1px;">LOKAL MOTOR</span></h3>
                     <div class="ai-summary">
                         <div id="scenarioName" class="scenario-badge">Analiz Ediliyor</div>
-                        <div id="aiSummaryText">Dosya bekleniyor...</div>
+                        <div id="aiSummaryText">Sohbetin karakteri çözümleniyor...</div>
                     </div>
                 </div>
 
                 <div class="grid-2">
                     <div class="stat-box"><span>Toplam Mesaj</span><b id="totalMsgs">-</b></div>
                     <div class="stat-box"><span>Başlangıç</span><b id="startDate">-</b></div>
-                    <div class="stat-box"><span>Rekor Gün</span><b id="peakDate">-</b></div>
-                    <div class="stat-box"><span>En Uzun Sessizlik</span><b id="longestSilence">-</b></div>
+                    <div class="stat-box"><span>Zirve Gün</span><b id="peakDate">-</b></div>
+                    <div class="stat-box"><span>Max Sessizlik</span><b id="longestSilence">-</b></div>
                 </div>
 
                 <div class="card">
-                    <h3>Kişi Dinamikleri (Hacim & Davranış)</h3>
+                    <h3>Kişi Analizi & Çaba Dağılımı</h3>
                     <div id="peopleStats"></div>
                 </div>
 
                 <div class="grid-2" style="margin-bottom:0;">
-                    <div class="card" style="padding:10px;">
-                        <h3 style="font-size:0.9em;">Favori Emojiler</h3>
+                    <div class="card" style="padding:15px;">
+                        <h3 style="font-size:0.9em; margin-bottom:10px;">Favori Emojiler</h3>
                         <div class="pill-container" id="emojiList"></div>
                     </div>
-                    <div class="card" style="padding:10px;">
-                        <h3 style="font-size:0.9em;">Sık Kelimeler</h3>
+                    <div class="card" style="padding:15px;">
+                        <h3 style="font-size:0.9em; margin-bottom:10px;">En Sık Kelimeler</h3>
                         <div class="pill-container" id="wordCloud"></div>
                     </div>
                 </div>
             </div>
-            <div class="watermark" id="watermark">Kendi sohbetini güvenle analiz et.</div>
+            <div class="watermark" id="watermark">Bu analiz <span>%100 Offline Yapay Zeka</span> ile üretilmiştir.</div>
         </div>
+        <button id="exportBtn">📸 Story Olarak İndir</button>
     </div>
     <script src="app.js"></script>
 </body>
