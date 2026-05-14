@@ -59,10 +59,18 @@
         #exportBtn:active { transform: scale(0.98); }
         .watermark { display: none; text-align: center; color: var(--text-muted); font-size: 0.85em; margin-top: 20px; padding: 10px; border-top: 1px solid rgba(255,255,255,0.1); font-weight: bold; letter-spacing: 1px; }
         .watermark span { background: var(--secondary-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Yeni Eklenen Manifesto CSS Alanı */
+        .manifesto-card { background: rgba(20, 20, 30, 0.6); padding: 25px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); margin-top: 30px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); backdrop-filter: blur(10px); }
+        .manifesto-card h2 { margin: 0 0 15px 0; font-size: 1.2em; color: #fff; line-height: 1.4; background: var(--primary-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .manifesto-card p { font-size: 0.9em; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px; }
+        .manifesto-card p strong { color: #fff; }
+        .manifesto-card h4 { margin: 15px 0 5px 0; color: #fff; font-size: 1em; }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Uygulama Arayüzü -->
         <div class="header-card">
             <h1>Sohbet Özeti</h1>
             <p>Verilerin Sadece Senin Cihazında İşlenir.</p>
@@ -119,6 +127,21 @@
             <div class="watermark" id="watermark">Bu analiz <span>%100 Offline Yapay Zeka</span> ile üretilmiştir.</div>
         </div>
         <button id="exportBtn">📸 Story Olarak İndir</button>
+
+        <!-- Editoryal Katman & Vizyon Beyanı -->
+        <div class="manifesto-card">
+            <h2>Dijital İtiraflarımız ve Mahremiyetin Maliyeti: Neden Kendi Lokal AI Motorumu İnşa Ettim?</h2>
+            
+            <p>Günümüzde "veri", en kolay gözden çıkarılan takas aracı haline geldi. Sadece birkaç eğlenceli istatistik görmek veya trendlere uymak uğruna, yıllar süren özel sohbetlerimizi, sırlarımızı ve iletişim dinamiklerimizi bilmediğimiz sunuculara gönüllü olarak yüklüyoruz. Ana akım dijital okuryazarlık, bir sızıntı haberi okuduğumuzda endişelenmeyi emrederken; iş "bana en çok kim mesaj atmış" sorusuna geldiğinde mahremiyeti tek tıkla devretmemize göz yumuyor.</p>
+            
+            <p>Bilgi kirliliği, dijital ayak izi ve veri istismarı üzerine yürütülen belgesel süreçleri ve derinlemesine araştırmalar bize çok net bir gerçeği gösteriyor: <strong>Gerçek veri güvenliği, veriyi kaynağında tutmaktır.</strong> Tam da bu yüzden, harici bir bulut sunucusuna veya dışarıdan bir yapay zeka API'sine veri göndermeyen; %100 kullanıcının kendi cihazında (offline) çalışan bu "Sohbet İstihbaratı" motorunu tasarladım.</p>
+            
+            <h4>Sistem Nasıl Çalışıyor?</h4>
+            <p>Geliştirdiğim tarayıcı tabanlı Web Worker mimarisi sayesinde, on binlerce satırlık şifresiz metin belgesi tamamen kullanıcının kendi donanımı üzerinde ayrıştırılıyor. Sisteme entegre edilen lokal karar motoru; tarafların hakimiyet oranlarını, duygu durumlarını ve yanıt hızlarını analiz ederek aradaki iletişimi teşhis ediyor. Başından sonuna kadar hiçbir bayt internete çıkmıyor.</p>
+            
+            <h4>Kurumlara Ne Sunuyorum?</h4>
+            <p>Bugünün dijital ekosisteminde kullanıcıların dikkatini çekmek için sadece tek yönlü içerik üretmek yeterli değil. Onlara güvenli, interaktif ve kişiselleştirilmiş dijital mikro-araçlar sunmak zorundasınız. Ben, karmaşık veriyi güvenli bir şekilde işleyen bu teknik mimarileri inşa ediyor ve ortaya çıkan teknik sonuçları, kitlelerin kolayca tüketeceği sürükleyici dijital hikayelere dönüştürüyorum.</p>
+        </div>
     </div>
     <script src="app.js"></script>
 </body>
